@@ -5,8 +5,8 @@ import re
 from pathlib import Path
 
 ASSETS = (
-    '<link rel="stylesheet" href="/public/img/preferences.css?v=4" />\n'
-    '<script defer src="/public/img/preferences.js?v=3"></script>\n'
+    '<link rel="stylesheet" href="/public/img/preferences.css?v=5" />\n'
+    '<script defer src="/public/img/preferences.js?v=4"></script>\n'
     '<script defer src="/public/img/branding-fa.js?v=3"></script>\n'
 )
 

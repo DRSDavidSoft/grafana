@@ -17,7 +17,38 @@ def replace(source, old, new):
     return source.replace(old, new)
 
 
+def patch_chrome_direction(source):
+    # AppChrome navigation, the mobile drawer, and dashboard controls use logical edges.
+    edges = [
+        ('dockedMegaMenu:(0,jt.css)({background:le?M.colors.background.canvas:M.colors.background.primary,borderRight:',
+         'dockedMegaMenu:(0,jt.css)({insetInlineStart:0,background:le?M.colors.background.canvas:M.colors.background.primary,borderInlineEnd:'),
+        ('scopesDashboardsContainerDocked:(0,jt.css)({left:fl},le&&{left:',
+         'scopesDashboardsContainerDocked:(0,jt.css)({insetInlineStart:fl},le&&{insetInlineStart:'),
+        ('zIndex:M.zIndex.navbarFixed,left:0,right:0,background:le?',
+         'zIndex:M.zIndex.navbarFixed,insetInline:0,background:le?'),
+        ('topNavMenuDocked:(0,jt.css)({left:fl})', 'topNavMenuDocked:(0,jt.css)({insetInlineStart:fl})'),
+        ('pageContainerMenuDocked:(0,jt.css)({paddingLeft:fl})', 'pageContainerMenuDocked:(0,jt.css)({paddingInlineStart:fl})'),
+        ('pageContainerMenuDockedScopes:(0,jt.css)({paddingLeft:', 'pageContainerMenuDockedScopes:(0,jt.css)({paddingInlineStart:'),
+        ('paddingLeft:B?M.spacing(J?.5:3.5):M.spacing(1)', 'paddingInlineStart:B?M.spacing(J?.5:3.5):M.spacing(1)'),
+        ('right:0}),sidebarContainerFloating', 'insetInlineEnd:0}),sidebarContainerFloating'),
+        ('enable:{left:!0},onResize:(Us,Uo,dr)=>Me(dr.getBoundingClientRect().width),handleClasses:{left:Pa.dragHandleBaseVertical}',
+         'enable:{[document.dir==="rtl"?"right":"left"]:!0},onResize:(Us,Uo,dr)=>Me(dr.getBoundingClientRect().width),handleClasses:{[document.dir==="rtl"?"right":"left"]:Pa.dragHandleBaseVertical}'),
+        ('menu:(0,jt.css)({display:"flex",bottom:0,flexDirection:"column",left:0,right:0,',
+         'menu:(0,jt.css)({display:"flex",bottom:0,flexDirection:"column",insetInlineStart:0,insetInlineEnd:0,'),
+        ('[M.breakpoints.up("md")]:{right:"unset"}}),wrapper:',
+         '[M.breakpoints.up("md")]:{insetInlineEnd:"unset"}}),wrapper:'),
+        ('zIndex:M.zIndex.modal,position:"fixed",top:`${(0,gl.vn)()}px`,borderRight:',
+         'zIndex:M.zIndex.modal,position:"fixed",top:`${(0,gl.vn)()}px`,borderInlineEnd:'),
+        ('rightControls:(0,n.css)({display:"flex",gap:Pt.spacing(1),float:"right"',
+         'rightControls:(0,n.css)({display:"flex",gap:Pt.spacing(1),float:"inline-end"'),
+    ]
+    for old, new in edges:
+        source = replace(source, old, new)
+    return source
+
+
 def patch_core(source):
+    source = patch_chrome_direction(source)
     source = replace(source, '{code:t.mz,name:"T\\xFCrk\\xE7e"}]',
                      '{code:t.mz,name:"T\\xFCrk\\xE7e"},{code:"fa-IR",name:"فارسی"}]')
     source = replace(
@@ -88,10 +119,22 @@ def sri(data):
 
 
 def patch_scenes(source):
-    return replace(
+    source = replace(
         source,
         'o=async i=>(await a[i]()).default',
         'o=async i=>i==="fa-IR"?window.digitalogicPreferences.loadPersian("grafana-scenes"):(await a[i]()).default',
+    )
+    # RGL translates from the physical left. Mirror at its boundary before rendering and after edits.
+    source = replace(
+        source,
+        'className:"react-grid-layout"},a.createElement(v(),{width:se',
+        'className:"react-grid-layout","data-dm-rtl-grid":document.dir==="rtl"?"":void 0},a.createElement(v(),{width:se',
+    )
+    return replace(
+        source,
+        'onResizeStop:ee.onResizeStop,onLayoutChange:ee.onLayoutChange,isBounded:!1,resizeHandle:a.createElement(O,null)',
+        'onResizeStop:ee.onResizeStop,onLayoutChange:ee.onLayoutChange,isBounded:!1,resizeHandle:a.createElement(O,null),'
+        '...window.digitalogicPreferences.rtlGridProps(Pe,n.cV,ee)',
     )
 
 

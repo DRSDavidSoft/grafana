@@ -38,10 +38,7 @@
   const persian = /^fa(?:-|$)/i.test(language ?? '');
   if (persian) {
     html.lang = persianLanguage;
-    // Grafana's docked sidebar and panel grid use physical left offsets.
-    if (isWelcome || html.classList.contains('digitalogic-monitoring-login')) {
-      html.dir = 'rtl';
-    }
+    html.dir = 'rtl';
     if (user) {
       user.language = persianLanguage;
       user.locale = persianLanguage;
@@ -51,7 +48,7 @@
   }
 
   const englishFont = 'Aptos, "Segoe UI", system-ui, sans-serif';
-  const persianFont = '"Yekan Bakh FaNum VF", ' + englishFont;
+  const persianFont = 'Vazirmatn, ' + englishFont;
   const palette = {
     light: {
       primary: '#0758d4', primaryHover: '#0846ab', contrast: '#ffffff',
@@ -153,6 +150,23 @@
     });
   }
 
+  function rtlGridProps(layout, columns, model) {
+    if (!persian) return {};
+
+    const mirrorItem = (item) => ({ ...item, x: columns - item.x - item.w });
+    const mirrorLayout = (items) => items.map(mirrorItem);
+    return {
+      layout: mirrorLayout(layout),
+      resizeHandles: ['sw'],
+      onDragStart: (items) => model.onDragStart(mirrorLayout(items)),
+      onDragStop: (items, oldItem, newItem) =>
+        model.onDragStop(mirrorLayout(items), mirrorItem(oldItem), mirrorItem(newItem)),
+      onResizeStop: (items, oldItem, newItem) =>
+        model.onResizeStop(mirrorLayout(items), mirrorItem(oldItem), mirrorItem(newItem)),
+      onLayoutChange: (items) => model.onLayoutChange(mirrorLayout(items)),
+    };
+  }
+
   function typography(options) {
     return { ...options, fontFamily: persian ? persianFont : options.fontFamily ?? englishFont };
   }
@@ -247,7 +261,7 @@
   }
 
   window.digitalogicPreferences = {
-    brandTheme, loadPersian, setThemeStyles, setThemeHandlers, publishTheme, typography,
+    brandTheme, loadPersian, setThemeStyles, setThemeHandlers, publishTheme, typography, rtlGridProps,
   };
 
   const manualTheme = url.searchParams.get('theme');

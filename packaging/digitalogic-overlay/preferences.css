@@ -1,14 +1,28 @@
 @font-face {
-  font-family: "Yekan Bakh FaNum VF";
-  src: url("YekanBakhFaNum-VF.woff2") format("woff2");
-  font-weight: 100 950;
+  font-family: Vazirmatn;
+  src: url("fonts/vazirmatn/Vazirmatn-FD-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Vazirmatn;
+  src: url("fonts/vazirmatn/Vazirmatn-FD-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Vazirmatn;
+  src: url("fonts/vazirmatn/Vazirmatn-FD-Bold.woff2") format("woff2");
+  font-weight: 700;
   font-display: swap;
 }
 
 body.dm-welcome { font-family: Aptos, "Segoe UI", system-ui, sans-serif; }
 
 html[lang|="fa"] {
-  --dm-interface-font: "Yekan Bakh FaNum VF", Aptos, "Segoe UI", system-ui, sans-serif;
+  --dm-interface-font: Vazirmatn, Aptos, "Segoe UI", system-ui, sans-serif;
 }
 
 html[lang|="fa"] :is(body, button, input, select, textarea, .dm-welcome, .dm-preference-controls) {
@@ -32,6 +46,34 @@ html[dir="rtl"] :is(.monaco-editor, pre, code, input[type="url"], input[type="em
 }
 html[dir="rtl"] .login-content-box input::placeholder { text-align: right; }
 html[dir="rtl"] :is(.monaco-editor, pre, code) { font-family: "Roboto Mono", monospace; }
+
+/* The grid and chart libraries calculate physical x positions from the left. */
+[data-dm-rtl-grid], html[dir="rtl"] .uplot { direction: ltr; }
+[data-dm-rtl-grid] .react-grid-item { direction: rtl; }
+[data-dm-rtl-grid] .scene-resize-handle {
+  right: auto;
+  left: 0;
+  cursor: sw-resize;
+  padding: 12px 12px 0 0;
+}
+[data-dm-rtl-grid] .scene-resize-handle svg { transform: scaleX(-1); }
+
+html[dir="rtl"] [data-testid="data-testid Command palette trigger"] > div > div:first-child {
+  left: auto;
+  right: 0;
+}
+html[dir="rtl"] [data-testid="data-testid Command palette trigger"] > div > div:last-child {
+  right: auto;
+  left: 0;
+}
+html[dir="rtl"] [data-testid="data-testid Command palette trigger"] button {
+  padding: 0 28px 0 56px;
+  text-align: start;
+}
+html[dir="rtl"] [data-testid="data-testid Command palette trigger"] > div > div:last-child span {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
 
 .dm-preference-controls {
   display: inline-flex;
@@ -70,7 +112,7 @@ html[dir="rtl"] :is(.monaco-editor, pre, code) { font-family: "Roboto Mono", mon
   mask: url("icons/unicons/moon.svg") center / contain no-repeat;
 }
 .theme-dark .dm-preference-theme::before { mask-image: url("icons/unicons/sun.svg"); }
-.dm-preference-language[lang="fa"] { font-family: "Yekan Bakh FaNum VF", sans-serif; }
+.dm-preference-language[lang="fa"] { font-family: Vazirmatn, sans-serif; }
 .dm-preference-status:empty { display: none; }
 .dm-preference-status {
   position: absolute;
