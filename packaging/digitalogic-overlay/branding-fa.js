@@ -9,8 +9,8 @@
     'Loading Digitalogic Monitoring': 'در حال بارگیری سامانهٔ پایش دیجیتالاجیک',
     'Monitoring home': 'صفحهٔ اصلی پایش',
     'Monitoring shortcuts': 'میان‌برهای پایش',
-    'See what’s': 'وضعیت سرویس‌ها را',
-    'running.': 'دنبال کنید',
+    'See what’s': 'پایش سرویس‌ها',
+    'running.': 'در یک نگاه',
     'Open infrastructure dashboards, check storage and UPS health, and investigate alerts.': 'داشبوردهای زیرساخت را باز کنید، سلامت فضای ذخیره‌سازی و برق اضطراری را ببینید و هشدارها را بررسی کنید.',
     'Check infrastructure, storage, and alerts across Digitalogic.': 'زیرساخت، فضای ذخیره‌سازی و هشدارهای دیجیتالاجیک را بررسی کنید.',
     'See how Digitalogic’s infrastructure is running, investigate changes, and respond to alerts from one workspace.': 'وضعیت زیرساخت دیجیتالاجیک را ببینید، تغییرات را بررسی کنید و به هشدارها پاسخ دهید.',
@@ -58,12 +58,19 @@
     'Review rules and their current state.': 'قوانین هشدار و وضعیت فعلی آن‌ها را بررسی کنید.',
   }));
 
+  const splitBrand = '.dm-brand, .dm-intro h1, #dm-workspace-title';
   function translateRegion(region) {
     const walker = document.createTreeWalker(region, NodeFilter.SHOW_TEXT);
     while (walker.nextNode()) {
       const node = walker.currentNode;
       const key = node.data.trim();
-      if (labels.has(key)) node.data = node.data.replace(key, labels.get(key));
+      const inSplitBrand = node.parentElement?.closest(splitBrand);
+      const replacement = inSplitBrand && key === 'Digitalogic'
+        ? labels.get('Monitoring')
+        : inSplitBrand && key === 'Monitoring'
+          ? labels.get('Digitalogic')
+          : labels.get(key);
+      if (replacement) node.data = node.data.replace(key, replacement);
     }
     for (const element of region.querySelectorAll('[aria-label]')) {
       const key = element.getAttribute('aria-label');

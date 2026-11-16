@@ -26,6 +26,7 @@ html[dir="rtl"] :is(.monaco-editor, pre, code, input[type="url"], input[type="em
   direction: ltr;
   text-align: start;
 }
+html[dir="rtl"] .login-content-box input::placeholder { text-align: right; }
 html[dir="rtl"] :is(.monaco-editor, pre, code) { font-family: "Roboto Mono", monospace; }
 
 .dm-preference-controls {
