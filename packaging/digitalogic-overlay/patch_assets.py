@@ -47,8 +47,56 @@ def patch_chrome_direction(source):
     return source
 
 
+def patch_toolbar_direction(source):
+    # Keep the outside of a split button rounded in the current writing direction.
+    source = replace(
+        source,
+        'borderTopLeftRadius:"unset",borderBottomLeftRadius:"unset",borderLeft:"1px solid rgba(255, 255, 255, 0.12)"',
+        'borderStartStartRadius:0,borderEndStartRadius:0,borderInlineStart:"1px solid rgba(255, 255, 255, 0.12)"',
+    )
+    source = replace(
+        source,
+        'borderTopRightRadius:"unset",borderBottomRightRadius:"unset",borderRight:"1px solid rgba(0, 0, 0, 0.12)"',
+        'borderStartEndRadius:0,borderEndEndRadius:0,borderInlineEnd:"1px solid rgba(0, 0, 0, 0.12)"',
+    )
+    source = replace(
+        source,
+        '!j&&(0,t.jsx)(d.f,{className:(0,n.css)({borderTopLeftRadius:"unset",borderBottomLeftRadius:"unset"}),value:Q',
+        '!j&&(0,t.jsx)(d.f,{value:Q',
+    )
+    for old, new in [
+        ('height:"16px",marginRight:p.spacing(1)}),buttonFullWidth:',
+         'height:"16px",marginInlineEnd:p.spacing(1)}),buttonFullWidth:'),
+        ('contentWithIcon:(0,n.css)({display:"none",paddingLeft:', 'contentWithIcon:(0,n.css)({display:"none",paddingInlineStart:'),
+        ('contentWithRightIcon:(0,n.css)({paddingRight:', 'contentWithRightIcon:(0,n.css)({paddingInlineEnd:'),
+        ('icon:"angle-double-left",type:"button",iconSize:"xl","data-testid":d.Tp.components.TimePicker.moveBackwardButton',
+         'icon:document.dir==="rtl"?"angle-double-right":"angle-double-left",type:"button",iconSize:"xl",'
+         '"data-testid":d.Tp.components.TimePicker.moveBackwardButton'),
+        ('icon:"angle-double-right",type:"button",variant:Ue,iconSize:"xl","data-testid":d.Tp.components.TimePicker.moveForwardButton',
+         'icon:document.dir==="rtl"?"angle-double-left":"angle-double-right",type:"button",variant:Ue,iconSize:"xl",'
+         '"data-testid":d.Tp.components.TimePicker.moveForwardButton'),
+    ]:
+        source = replace(source, old, new)
+    # Localize visible durations and accessible names while preserving Grafana's URL values.
+    return replace(
+        source,
+        'return{label:C,value:C,ariaLabel:I}});return D&&x.unshift',
+        """
+        const locale = document.documentElement.lang;
+        const duration = /^(\\d+)(ms|[smhdwMy])$/.exec(C);
+        if (/^fa(?:-|$)/.test(locale) && duration) {
+          const units = {ms:"millisecond",s:"second",m:"minute",h:"hour",d:"day",w:"week",M:"month",y:"year"};
+          const label = new Intl.NumberFormat(locale, {
+            style:"unit",unit:units[duration[2]],unitDisplay:"long"
+          }).format(Number(duration[1]));
+          return {label,value:C,ariaLabel:label};
+        }
+        return{label:C,value:C,ariaLabel:I}});return D&&x.unshift""",
+    )
+
+
 def patch_core(source):
-    source = patch_chrome_direction(source)
+    source = patch_toolbar_direction(patch_chrome_direction(source))
     source = replace(source, '{code:t.mz,name:"T\\xFCrk\\xE7e"}]',
                      '{code:t.mz,name:"T\\xFCrk\\xE7e"},{code:"fa-IR",name:"فارسی"}]')
     source = replace(
