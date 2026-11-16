@@ -17,6 +17,9 @@ WORKSPACE_ASSETS = (
 )
 
 
+DASHBOARD_LOCALES_ASSET = '<script defer src="/public/img/dashboard-locales.js?v=1"></script>\n'
+
+
 def update_template(source, workspace=False):
     # Preserve the template and any independent workspace asset updates.
     for asset in re.findall(r'/public/img/[^"?]+\?v=\d+', ASSETS):
@@ -28,6 +31,8 @@ def update_template(source, workspace=False):
         source = source.replace("</head>", ASSETS + "</head>", 1)
     if workspace and "workspace-cards.js" not in source:
         source = source.replace(ASSETS, ASSETS + WORKSPACE_ASSETS, 1)
+    if workspace and "dashboard-locales.js" not in source:
+        source = source.replace("</head>", DASHBOARD_LOCALES_ASSET + "</head>", 1)
     return source
 
 

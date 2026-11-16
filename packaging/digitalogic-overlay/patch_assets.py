@@ -102,6 +102,15 @@ async function f(u,P){
         '"data-role":"menuitem",ref:q,"data-testid":k,"aria-label":T,"aria-checked":I',
         '"data-role":"menuitem",ref:q,"data-testid":k,"aria-label":T,"aria-current":g.ariaCurrent,"aria-checked":I',
     )
+    # BigValue uses the same weight when fitting values and when drawing them.
+    source = replace(source, 'v=1.2,b=30,g=500;class y{constructor(j)', 'v=1.2,b=30,g=700;class y{constructor(j)')
+    source = replace(
+        source,
+        'fontWeight:g,lineHeight:v,position:"relative",zIndex:1};switch(this.justifyCenter',
+        'fontWeight:g,lineHeight:v,position:"relative",zIndex:1};'
+        'if(Number.isFinite(this.props.value.numeric)&&/^[+−-]?[\\p{Nd}]/u.test(this.textValues.text)){j.direction="ltr";j.unicodeBidi="isolate"}'
+        'switch(this.justifyCenter',
+    )
     # Built-in themes get the same palette as the branded pages. Keep accessible and
     # optional Grafana themes available under their own palettes.
     for mode in ("light", "dark"):
@@ -138,11 +147,14 @@ def patch_scenes(source):
     )
 
 
-def prepare(build, output):
+def prepare(build, output, core_only=False):
     manifest = json.loads((build / "assets-manifest.json").read_text())
     assets = manifest["entrypoints"]["app"]["assets"]["js"]
     output.mkdir(parents=True, exist_ok=True)
-    for chunk, patch in [(CORE_CHUNK, patch_core), (SCENES_CHUNK, patch_scenes)]:
+    patches = [(CORE_CHUNK, patch_core)]
+    if not core_only:
+        patches.append((SCENES_CHUNK, patch_scenes))
+    for chunk, patch in patches:
         original = (build / chunk).read_bytes()
         original_entry = manifest.get(chunk)
         if not original_entry or original_entry["integrity"] != sri(original):
@@ -169,5 +181,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("original_build", type=Path)
     parser.add_argument("output_dir", type=Path)
+    parser.add_argument("--core-only", action="store_true")
     args = parser.parse_args()
-    prepare(args.original_build, args.output_dir)
+    prepare(args.original_build, args.output_dir, core_only=args.core_only)
