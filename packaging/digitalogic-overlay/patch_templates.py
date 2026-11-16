@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """Attach the Digitalogic overlay assets to the current branding templates."""
 import argparse
+import re
 from pathlib import Path
 
 ASSETS = (
-    '<link rel="stylesheet" href="/public/img/preferences.css?v=2" />\n'
-    '<script defer src="/public/img/preferences.js?v=1"></script>\n'
-    '<script defer src="/public/img/branding-fa.js?v=2"></script>\n'
+    '<link rel="stylesheet" href="/public/img/preferences.css?v=4" />\n'
+    '<script defer src="/public/img/preferences.js?v=3"></script>\n'
+    '<script defer src="/public/img/branding-fa.js?v=3"></script>\n'
 )
 
 
@@ -17,18 +18,15 @@ WORKSPACE_ASSETS = (
 
 
 def update_template(source, workspace=False):
-    previous_assets = ASSETS.replace("preferences.css?v=2", "preferences.css?v=1").replace(
-        "branding-fa.js?v=2", "branding-fa.js?v=1"
-    )
-    if previous_assets in source:
-        source = source.replace(previous_assets, ASSETS, 1)
+    # Preserve the template and any independent workspace asset updates.
+    for asset in re.findall(r'/public/img/[^"?]+\?v=\d+', ASSETS):
+        prefix = asset.rsplit("=", 1)[0] + "="
+        source = re.sub(rf'{re.escape(prefix)}\d+(?=")', lambda _: asset, source)
     if ASSETS not in source:
         if "preferences.js" in source or source.count("</head>") != 1:
             raise ValueError("Expected a recognized Grafana branding template")
         source = source.replace("</head>", ASSETS + "</head>", 1)
-    if workspace and WORKSPACE_ASSETS not in source:
-        if "workspace-cards.js" in source:
-            raise ValueError("Expected a recognized workspace asset version")
+    if workspace and "workspace-cards.js" not in source:
         source = source.replace(ASSETS, ASSETS + WORKSPACE_ASSETS, 1)
     return source
 

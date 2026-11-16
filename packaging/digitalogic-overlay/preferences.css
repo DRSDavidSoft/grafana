@@ -20,7 +20,11 @@ html[lang|="fa"] :is(.dm-login-headline, .dm-workspace h1, .dm-intro h1) {
   line-height: 1.2;
 }
 
-html[dir="rtl"] :is(.dm-arrow, .dm-recovery-back .dm-arrow) { transform: scaleX(-1); }
+html[lang|="fa"] #reactRoot :is(h1, h2, h3, h4, h5, h6, p, label, legend) {
+  unicode-bidi: plaintext;
+}
+
+:is(html[dir="rtl"], .dm-workspace[dir="rtl"]) .dm-arrow { transform: scaleX(-1); }
 html[dir="rtl"] .dm-back .dm-arrow { transform: none; }
 html[dir="rtl"] :is(.monaco-editor, pre, code, input[type="url"], input[type="email"], input[type="password"], input[name="user"]) {
   direction: ltr;

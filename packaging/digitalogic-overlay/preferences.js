@@ -38,7 +38,10 @@
   const persian = /^fa(?:-|$)/i.test(language ?? '');
   if (persian) {
     html.lang = persianLanguage;
-    html.dir = 'rtl';
+    // Grafana's docked sidebar and panel grid use physical left offsets.
+    if (isWelcome || html.classList.contains('digitalogic-monitoring-login')) {
+      html.dir = 'rtl';
+    }
     if (user) {
       user.language = persianLanguage;
       user.locale = persianLanguage;
@@ -141,7 +144,7 @@
   });
 
   function loadPersian(catalog = 'grafana') {
-    return fetch(`${base}/public/locales/fa-IR/${catalog}.json?v=13.2.3-1`).then((response) => {
+    return fetch(`${base}/public/locales/fa-IR/${catalog}.json?v=13.2.3-2`).then((response) => {
       if (!response.ok) throw new Error(`Could not load Persian translations (${response.status})`);
       return response.json();
     }).catch((error) => {

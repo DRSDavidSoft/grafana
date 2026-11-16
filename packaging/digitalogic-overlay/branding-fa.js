@@ -81,7 +81,12 @@
   if (document.body.classList.contains('dm-welcome')) {
     for (const region of document.querySelectorAll('.dm-header, .dm-shell')) translateRegion(region);
   } else {
-    for (const template of document.querySelectorAll('template[id^="dm-"]')) translateRegion(template.content);
+    for (const template of document.querySelectorAll('template[id^="dm-"]')) {
+      translateRegion(template.content);
+      if (template.id === 'dm-workspace' && template.content.firstElementChild) {
+        template.content.firstElementChild.dir = 'rtl';
+      }
+    }
     const preloader = document.querySelector('.preloader');
     if (preloader) translateRegion(preloader);
     if (!document.documentElement.classList.contains('digitalogic-monitoring-login')) return;
