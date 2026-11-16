@@ -2,7 +2,7 @@
 
 The overlay adds the Persian Grafana and Scenes catalogs, right-to-left layout, the Digitalogic palette and typography, and language and theme buttons on the app navigation and public entry pages. The browser sends theme previews to peer tabs before saving and applies messages locally. Language changes use Grafana's user preference API when signed in and browser storage on public pages.
 
-Signed-in users can collapse the details of each workspace shortcut and drag cards by their handles. The grip button also offers Move earlier and Move later for keyboard use. The browser stores each user's layout separately for each organization.
+Signed-in users can collapse the details of each workspace shortcut and drag cards by their handles. The grip button also offers Move earlier and Move later for keyboard use. The browser stores each user's layout separately for each organization. Dashboard link dropdowns show the current dashboard with a checkmark when it matches the dropdown's tags.
 
 The catalogs match Grafana 13.2.3 and Scenes 8.13.5. They were machine translated, checked against the English message keys and placeholders, and edited for common interface terminology. Crowdin is the upstream translation workflow. Submit the catalog that matches the source revision in the project and route it through proofreading. Dashboard titles, queries, and text entered by users retain their stored content.
 

@@ -58,6 +58,19 @@ async function f(u,P){
         '(0,m.jsx)(j0,{}),!jn&&(0,m.jsx)(nb,{})',
         '(0,m.jsx)(j0,{}),(0,m.jsx)("div",{"data-dm-preferences":""}),!jn&&(0,m.jsx)(nb,{})',
     )
+    # Keep the open dashboard in tag-based dropdowns and mark it as the current page.
+    source = replace(source, 'if(on.uid===Rt)continue;', 'if(!Pt.asDropdown&&on.uid===Rt)continue;')
+    source = replace(
+        source,
+        'label:en.title,testId:s.Tp.components.DashboardLinks.link',
+        'label:en.title,icon:en.uid===Pt?"check":void 0,ariaCurrent:en.uid===Pt?"page":void 0,'
+        'testId:s.Tp.components.DashboardLinks.link',
+    )
+    source = replace(
+        source,
+        '"data-role":"menuitem",ref:q,"data-testid":k,"aria-label":T,"aria-checked":I',
+        '"data-role":"menuitem",ref:q,"data-testid":k,"aria-label":T,"aria-current":g.ariaCurrent,"aria-checked":I',
+    )
     # Built-in themes get the same palette as the branded pages. Keep accessible and
     # optional Grafana themes available under their own palettes.
     for mode in ("light", "dark"):
