@@ -1,0 +1,117 @@
+.dm-workspace .dm-tiles {
+  align-items: start;
+}
+
+.dm-shortcut {
+  position: relative;
+  min-width: 0;
+  border: 1px solid var(--dm-line);
+  border-radius: 16px;
+  background: var(--dm-surface);
+}
+
+.dm-shortcut:hover,
+.dm-shortcut:focus-within {
+  border-color: var(--dm-blue);
+}
+
+.dm-shortcut .dm-tile {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 8px 10px;
+  padding: 12px 14px;
+  background: transparent;
+  border: 0;
+}
+
+.dm-shortcut .dm-tile > h2 {
+  margin: 0;
+  padding-inline-end: 62px;
+  overflow-wrap: anywhere;
+}
+
+.dm-shortcut .dm-tile > p {
+  grid-column: 1 / -1;
+  padding-block-end: 4px;
+}
+
+.dm-shortcut .dm-tile > .dm-arrow {
+  display: none;
+}
+
+.dm-shortcut .dm-icon {
+  width: 32px;
+  height: 32px;
+}
+
+.dm-shortcut-actions {
+  position: absolute;
+  inset-block-start: 12px;
+  inset-inline-end: 9px;
+  display: flex;
+  gap: 2px;
+}
+
+.dm-shortcut-actions button,
+.dm-shortcut-moves button {
+  min-height: 32px;
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  color: var(--dm-blue);
+  cursor: pointer;
+}
+
+.dm-shortcut-actions button {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  padding: 0;
+}
+
+.dm-shortcut-actions button:hover,
+.dm-shortcut-moves button:not(:disabled):hover {
+  background: var(--dm-icon-bg);
+}
+
+.dm-shortcut-actions button::before {
+  content: "";
+  width: 17px;
+  height: 17px;
+  background: currentColor;
+  mask: var(--dm-shortcut-icon) center / contain no-repeat;
+}
+
+.dm-shortcut-toggle {
+  --dm-shortcut-icon: url("icons/unicons/angle-down.svg");
+}
+.dm-shortcut-toggle[aria-expanded="true"] {
+  --dm-shortcut-icon: url("icons/unicons/angle-up.svg");
+}
+.dm-shortcut-actions .dm-shortcut-handle {
+  --dm-shortcut-icon: url("icons/unicons/draggabledots.svg");
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.dm-shortcut-moves:not([hidden]) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 0 10px 8px;
+}
+
+.dm-shortcut-moves button {
+  padding: 4px 8px;
+  font-size: 13px;
+}
+.dm-shortcut-moves button:disabled {
+  cursor: default;
+  opacity: .5;
+}
+
+.dm-shortcut-dragging { opacity: .55; }
+.dm-shortcut-dragging .dm-shortcut-handle { cursor: grabbing; }
+.dm-shortcut-drop { outline: 2px solid var(--dm-blue); outline-offset: 2px; }

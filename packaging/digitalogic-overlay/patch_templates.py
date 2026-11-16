@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Attach the preference and Persian branding assets to Digitalogic's current templates."""
+"""Attach the Digitalogic overlay assets to the current branding templates."""
 import argparse
 from pathlib import Path
 
@@ -10,14 +10,27 @@ ASSETS = (
 )
 
 
-def update_template(source):
-    if ASSETS.strip() in source:
-        return source
-    if ASSETS.strip().replace("preferences.css?v=2", "preferences.css?v=1").replace("branding-fa.js?v=2", "branding-fa.js?v=1") in source:
-        return source.replace("preferences.css?v=1", "preferences.css?v=2").replace("branding-fa.js?v=1", "branding-fa.js?v=2")
-    if "preferences.js" in source or source.count("</head>") != 1:
-        raise ValueError("Expected an unmodified Grafana branding template")
-    return source.replace("</head>", ASSETS + "</head>", 1)
+WORKSPACE_ASSETS = (
+    '<link rel="stylesheet" href="/public/img/workspace-cards.css?v=1" />\n'
+    '<script defer src="/public/img/workspace-cards.js?v=1"></script>\n'
+)
+
+
+def update_template(source, workspace=False):
+    previous_assets = ASSETS.replace("preferences.css?v=2", "preferences.css?v=1").replace(
+        "branding-fa.js?v=2", "branding-fa.js?v=1"
+    )
+    if previous_assets in source:
+        source = source.replace(previous_assets, ASSETS, 1)
+    if ASSETS not in source:
+        if "preferences.js" in source or source.count("</head>") != 1:
+            raise ValueError("Expected a recognized Grafana branding template")
+        source = source.replace("</head>", ASSETS + "</head>", 1)
+    if workspace and WORKSPACE_ASSETS not in source:
+        if "workspace-cards.js" in source:
+            raise ValueError("Expected a recognized workspace asset version")
+        source = source.replace(ASSETS, ASSETS + WORKSPACE_ASSETS, 1)
+    return source
 
 
 if __name__ == "__main__":
@@ -27,4 +40,5 @@ if __name__ == "__main__":
     args = parser.parse_args()
     args.output_dir.mkdir(parents=True, exist_ok=True)
     for file in ("index.html", "monitoring-welcome.html"):
-        (args.output_dir / file).write_text(update_template((args.branding / file).read_text()))
+        source = (args.branding / file).read_text()
+        (args.output_dir / file).write_text(update_template(source, workspace=file == "index.html"))
