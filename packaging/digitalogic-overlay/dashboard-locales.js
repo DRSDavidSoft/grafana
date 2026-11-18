@@ -55,13 +55,33 @@
     }).sort((a, b) => b.literalSize - a.literalSize);
   }
 
+  function normalizeLabelEscapes(value) {
+    const characters = {
+      '&amp;': '&', '&#38;': '&', '&#x26;': '&',
+      '&quot;': '"', '&#34;': '"', '&#x22;': '"',
+      '&apos;': "'", '&#39;': "'", '&#x27;': "'",
+      '&#47;': '/', '&#x2f;': '/',
+    };
+    // Native labels can contain two layers of escaping before interpolation.
+    for (let pass = 0; pass < 2; pass++) {
+      const decoded = value.replace(
+        /&(?:amp|quot|apos|#(?:38|34|39|47|x26|x22|x27|x2f));/gi,
+        entity => characters[entity.toLowerCase()]
+      );
+      if (decoded === value) break;
+      value = decoded;
+    }
+    return value;
+  }
+
   function localize(text, depth = 0) {
     const trimmed = text.trim();
     let localized = Object.hasOwn(catalog, trimmed) ? catalog[trimmed] : undefined;
     if (!localized && trimmed.length <= 2048 && depth < 4) {
-      for (const template of templates) {
-        // Grafana escapes a slash in some generated accessible series names.
-        const match = template.pattern.exec(trimmed.replace(/&#(?:x2f|47);/gi, '/'));
+      const normalized = normalizeLabelEscapes(trimmed);
+      localized = Object.hasOwn(catalog, normalized) ? catalog[normalized] : undefined;
+      for (const template of localized ? [] : templates) {
+        const match = template.pattern.exec(normalized);
         if (!match) continue;
         const values = new Map();
         let consistent = true;

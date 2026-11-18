@@ -119,6 +119,11 @@ const catalog = {
   'Sensor node-special · Current': 'ترجمهٔ اختصاصی',
   'Sampling period': 'بازهٔ نمونه‌برداری',
   'Telemetry dashboard': 'داشبورد پایش',
+  'Cameras & recorder': 'دوربین‌ها و ضبط‌کننده',
+  'Sensor "A" & status': 'وضعیت حسگر A',
+  "Sensor's status": 'وضعیت حسگر',
+  'Raw &amp; label': 'متن دقیق کاتالوگ',
+  'Raw & label': 'متن نرمال‌شده',
 };
 const translate = vm.runInNewContext(
   `(() => { const catalog = input; ${functions}; const templates = compileTemplates(catalog); return localize; })()`,
@@ -150,6 +155,23 @@ for (const [original, expected] of [
     '"Telemetry dashboard" را به عنوان مورد علاقه علامت بزنید',
     'نشان‌گذاری «داشبورد پایش» به‌عنوان مورد علاقه',
   ],
+  [
+    '"Cameras &amp;amp; recorder" را به عنوان مورد علاقه علامت بزنید',
+    'نشان‌گذاری «دوربین‌ها و ضبط‌کننده» به‌عنوان مورد علاقه',
+  ],
+  [
+    '&quot;Cameras &amp; recorder&quot; را به عنوان مورد علاقه علامت بزنید',
+    'نشان‌گذاری «دوربین‌ها و ضبط‌کننده» به‌عنوان مورد علاقه',
+  ],
+  ['Cameras &#38; recorder', 'دوربین‌ها و ضبط‌کننده'],
+  ['Cameras &#x26; recorder', 'دوربین‌ها و ضبط‌کننده'],
+  ['Sensor &amp;quot;A&amp;quot; &amp;amp; status', 'وضعیت حسگر A'],
+  ['Sensor &#34;A&#34; &amp; status', 'وضعیت حسگر A'],
+  ['Sensor&#x27;s status', 'وضعیت حسگر'],
+  ['Sensor&apos;s status', 'وضعیت حسگر'],
+  ['Raw &amp; label', 'متن دقیق کاتالوگ'],
+  ['Unrelated &amp; label', 'Unrelated &amp; label'],
+  ['Credits · service-&lt;safe&gt;', 'اعتبار · service-&lt;safe&gt;'],
 ]) {
   assert.equal(translate(original), expected);
   checks++;

@@ -42,4 +42,4 @@ python3 patch_assets.py /opt/digitalogic-monitoring/grafana/public/build /tmp/gr
 node presentation-regression/test_dashboard_presentation.cjs /tmp/grafana-build
 ```
 
-The checks exercise the generated renderer and synthetic display templates using Node.js built-ins. Shared duration words and generated accessible labels use the same display adapter. Nested template expansion is bounded to four levels.
+The checks exercise the generated renderer and synthetic display templates using Node.js built-ins. Shared duration words and generated accessible labels use the same display adapter. Native ampersand, quote, apostrophe and slash escapes are normalized through an allowlist for at most two passes when matching display labels. Exact authored entries take precedence. Nested template expansion is bounded to four levels.
