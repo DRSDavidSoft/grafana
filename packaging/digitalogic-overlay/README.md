@@ -10,7 +10,7 @@ The catalogs match Grafana 13.2.3 and Scenes 8.13.5. They were machine translate
 
 ## Persian dashboard content
 
-Provisioned dashboard definitions can have a separate Persian display catalog. In the signed-in Persian view the overlay translates authored labels, descriptions, legend entries, and known status values. It leaves the saved dashboard, queries, and value mappings in their original form. Stat values use weight 700, and numeric values keep their units in reading order in RTL layouts. Localized empty messages use a smaller wrapping text style. Ad hoc filter expressions retain label/operator/value order while the surrounding variable labels follow the interface direction. The display catalog also covers generated table headings and dropdown labels.
+Provisioned dashboard definitions can have a separate Persian display catalog. In the signed-in Persian view the overlay translates authored labels, descriptions, legend entries, and known status values. It leaves the saved dashboard, queries, and value mappings in their original form. Persian numeric Stat values use weight 700, retain units in reading order, and are capped at 64px. All text Stat values, including unknown mappings, relative times and no-data states, wrap at a maximum of 24px and weight 400 in the native renderer. This does not depend on the display catalog loading or a list of known messages. Series names have a separate 18px cap. Exact authored catalog entries take precedence over anchored display templates; captured labels are preserved or translated through exact catalog entries. Queries and editable controls are never translated. Run the maintained presentation regression checks after generating a new native bundle. Ad hoc filter expressions retain label/operator/value order while the surrounding variable labels follow the interface direction. The display catalog also covers generated table headings and dropdown labels.
 
 Keep the catalog outside public assets. Use dashboard UIDs as the top-level JSON keys. Each value contains a `strings` object mapping exact English display strings to Persian and an optional `title` object with `original` and `value` fields for the browser page title. The optional `extract_dashboard_text.py` utility lists candidate strings from provisioned V1 and V2 JSON files for review.
 
@@ -34,3 +34,12 @@ Install the generated JavaScript chunks and manifest in Grafana's `public/build`
 Check Persian sign-in and the signed-in Profile page on desktop and mobile. Switch the navbar language and reload to verify the saved preference. Open two tabs for the same account and organization and change the Profile theme without saving. The second tab should reflect the preview while the preference API reports the previously saved value. Check both theme palettes and confirm the Vazirmatn Farsi Digits font loads.
 
 Load a dashboard with a known status mapping in Persian and English. In the Persian view check the row and panel titles, a tooltip, the current status, and table headers. Check the live stat weight and unit order on narrow and wide screens. Confirm that unauthorized dashboard requests also deny access to the matching catalog.
+
+Generate the pinned bundle and run the presentation checks with Node.js and Python 3.
+
+```sh
+python3 patch_assets.py /opt/digitalogic-monitoring/grafana/public/build /tmp/grafana-build --core-only
+node presentation-regression/test_dashboard_presentation.cjs /tmp/grafana-build
+```
+
+The checks exercise the generated renderer and synthetic display templates using Node.js built-ins. Shared duration words and generated accessible labels use the same display adapter. Nested template expansion is bounded to four levels.

@@ -157,8 +157,23 @@ async function f(u,P){
         'fontWeight:g,lineHeight:v,position:"relative",zIndex:1};switch(this.justifyCenter',
         'fontWeight:g,lineHeight:v,position:"relative",zIndex:1};'
         'if(Number.isFinite(this.props.value.numeric)&&/^[+−-]?[\\p{Nd}]/u.test(this.textValues.text)){j.direction="ltr";j.unicodeBidi="isolate"}'
+        'if(/^fa(?:-|$)/.test(document.documentElement.lang)){'
+        'const dmNumber=Number.isFinite(this.props.value.numeric)&&/^[+−-]?[\\p{Nd}\\s.,٫٬%٪eE+−-]+$/u.test(this.textValues.text.trim());'
+        'j["--dm-stat-kind"]=dmNumber?"number":"text";'
+        'j.fontSize=Math.min(j.fontSize,dmNumber?64:Math.max(12,Math.min(24,this.maxTextWidth/9,this.maxTextHeight/2.6)));'
+        'j.maxWidth="100%";j.whiteSpace="normal";j.overflowWrap="anywhere";j.lineHeight=1.3;'
+        'if(!dmNumber){j.fontWeight=400;j.direction="rtl";j.unicodeBidi="plaintext"}}'
         'switch(this.justifyCenter',
     )
+    # Stable semantic hooks, independent of generated CSS names and inline weights.
+    source = replace(source, 'style:V,onClick:j,title:H,children:',
+                     'style:V,onClick:j,title:H,"data-dm-stat":"","data-dm-stat-kind":G["--dm-stat-kind"],children:')
+    source = replace(source, 'className:W,style:V,title:H,children:',
+                     'className:W,style:V,title:H,"data-dm-stat":"","data-dm-stat-kind":G["--dm-stat-kind"],children:')
+    title = '("div",{style:U,children:Q.title})'
+    if source.count(title) != 2:
+        raise ValueError('Expected both linked and unlinked Stat title renderers')
+    source = source.replace(title, '("div",{style:U,"data-dm-stat-name":"",children:Q.title})')
     # Built-in themes get the same palette as the branded pages. Keep accessible and
     # optional Grafana themes available under their own palettes.
     for mode in ("light", "dark"):

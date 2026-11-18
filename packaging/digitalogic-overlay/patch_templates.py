@@ -5,7 +5,7 @@ import re
 from pathlib import Path
 
 ASSETS = (
-    '<link rel="stylesheet" href="/public/img/preferences.css?v=6" />\n'
+    '<link rel="stylesheet" href="/public/img/preferences.css?v=7" />\n'
     '<script defer src="/public/img/preferences.js?v=5"></script>\n'
     '<script defer src="/public/img/branding-fa.js?v=3"></script>\n'
 )
@@ -17,7 +17,7 @@ WORKSPACE_ASSETS = (
 )
 
 
-DASHBOARD_LOCALES_ASSET = '<script defer src="/public/img/dashboard-locales.js?v=3"></script>\n'
+DASHBOARD_LOCALES_ASSET = '<script defer src="/public/img/dashboard-locales.js?v=5"></script>\n'
 
 
 def update_template(source, workspace=False):
@@ -32,7 +32,7 @@ def update_template(source, workspace=False):
     if workspace and "workspace-cards.js" not in source:
         source = source.replace(ASSETS, ASSETS + WORKSPACE_ASSETS, 1)
     if workspace:
-        source = re.sub(r'/public/img/dashboard-locales\.js\?v=\d+', '/public/img/dashboard-locales.js?v=3', source)
+        source = re.sub(r'/public/img/dashboard-locales\.js\?v=\d+', '/public/img/dashboard-locales.js?v=5', source)
     if workspace and "dashboard-locales.js" not in source:
         source = source.replace("</head>", DASHBOARD_LOCALES_ASSET + "</head>", 1)
     return source

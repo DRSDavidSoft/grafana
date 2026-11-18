@@ -1,6 +1,20 @@
 (() => {
   if (!document.documentElement.lang.startsWith('fa') || !window.grafanaBootData?.user?.isSignedIn) return;
 
+  const sharedCatalog = {
+    day: 'روز', days: 'روز', hour: 'ساعت', hours: 'ساعت',
+    minute: 'دقیقه', minutes: 'دقیقه', second: 'ثانیه', seconds: 'ثانیه',
+    week: 'هفته', weeks: 'هفته', month: 'ماه', months: 'ماه', year: 'سال', years: 'سال',
+    'No data': 'داده‌ای وجود ندارد', 'No data points': 'داده‌ای برای نمایش وجود ندارد',
+    Unavailable: 'در دسترس نیست',
+    'Edit color for {{series}}': 'ویرایش رنگ {{series}}',
+    'ویرایش رنگ برای {{series}}': 'ویرایش رنگ {{series}}',
+    'Panel menu {{panel}}': 'منوی پنل {{panel}}',
+    'منوی پانل {{panel}}': 'منوی پنل {{panel}}',
+    'همه سریال ها انتخاب شدند': 'همهٔ سری‌ها انتخاب شده‌اند',
+    '"{{dashboard}}" را به عنوان مورد علاقه علامت بزنید': 'نشان‌گذاری «{{dashboard}}» به‌عنوان مورد علاقه',
+  };
+
   const subUrl = window.grafanaBootData.settings.appSubUrl ?? '';
   const displaySurface = '#pageContent, header.dm-app-nav, #grafana-portal-container, ' +
     '[role="tooltip"], [role="listbox"], [role="menu"], [role="dialog"]';
@@ -12,27 +26,59 @@
   const translatedAttrs = new Map();
   let currentUid;
   let catalog;
+  let templates = [];
   let frame;
 
   function dashboardUid() {
     return location.pathname.slice(subUrl.length).match(/^\/d(?:-solo)?\/([\w-]{1,40})(?:\/|$)/)?.[1];
   }
 
-  function localize(text) {
-    const trimmed = text.trim();
-    const localized = Object.hasOwn(catalog, trimmed) ? catalog[trimmed] : undefined;
-    return localized ? text.replace(trimmed, () => localized) : text;
+  function compileTemplates(strings) {
+    // Only authored catalog templates may match a whole display label.
+    // Captures remain data; never interpret labels as regular expressions or HTML.
+    return Object.entries(strings).flatMap(([original, value]) => {
+      const names = [];
+      let literalSize = 0;
+      const parts = original.split(/({{\s*[\w-]+\s*}})/g);
+      if (parts.length === 1) return [];
+      const pattern = parts.map(part => {
+        const parameter = /^{{\s*([\w-]+)\s*}}$/.exec(part);
+        if (parameter) {
+          names.push(parameter[1]);
+          return '(.+?)';
+        }
+        literalSize += part.length;
+        return part.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      }).join('');
+      if (!literalSize || names.length > 8) return [];
+      return [{ pattern: new RegExp('^' + pattern + '$'), names, value, literalSize }];
+    }).sort((a, b) => b.literalSize - a.literalSize);
   }
 
-  const emptyValues = new Set([
-    'No data', 'No data points', 'Unavailable',
-    'داده‌ای وجود ندارد', 'داده ای وجود ندارد', 'داده‌ای برای نمایش وجود ندارد', 'در دسترس نیست',
-  ]);
-
-  function fitEmptyValue(parent) {
-    const value = parent.closest('[style*="font-size"]');
-    if (!value || value.style.fontWeight !== '700' || value.style.zIndex !== '1') return;
-    value.toggleAttribute('data-dm-empty-value', emptyValues.has(value.textContent.trim()));
+  function localize(text, depth = 0) {
+    const trimmed = text.trim();
+    let localized = Object.hasOwn(catalog, trimmed) ? catalog[trimmed] : undefined;
+    if (!localized && trimmed.length <= 2048 && depth < 4) {
+      for (const template of templates) {
+        // Grafana escapes a slash in some generated accessible series names.
+        const match = template.pattern.exec(trimmed.replace(/&#(?:x2f|47);/gi, '/'));
+        if (!match) continue;
+        const values = new Map();
+        let consistent = true;
+        template.names.forEach((name, i) => {
+          const raw = match[i + 1];
+          if (values.has(name) && values.get(name) !== raw) consistent = false;
+          values.set(name, raw);
+        });
+        if (!consistent) continue;
+        localized = template.value.replace(/{{\s*([\w-]+)\s*}}/g, (token, name) => {
+          const raw = values.get(name);
+          return raw === undefined ? token : localize(raw, depth + 1);
+        });
+        break;
+      }
+    }
+    return localized ? text.replace(trimmed, () => localized) : text;
   }
 
   function localizeText(node) {
@@ -40,7 +86,6 @@
     if (!parent || !parent.closest(displaySurface) || parent.closest(editableSurface)) return;
     const previous = translatedText.get(node);
     if (previous?.value === node.data) {
-      fitEmptyValue(parent);
       return;
     }
     const value = localize(node.data);
@@ -50,7 +95,6 @@
     } else {
       translatedText.delete(node);
     }
-    fitEmptyValue(parent);
   }
 
   function localizeAttributes(element) {
@@ -128,7 +172,8 @@
       if (!response.ok || uid !== currentUid) return;
       const { strings, title } = await response.json();
       if (uid !== currentUid) return;
-      catalog = strings;
+      catalog = { ...sharedCatalog, ...strings };
+      templates = compileTemplates(catalog);
       dashboardTitle = title;
       translateVisibleContent();
     } catch {
@@ -142,6 +187,7 @@
     if (uid !== currentUid) {
       currentUid = uid;
       catalog = undefined;
+      templates = [];
       dashboardTitle = undefined;
       restoreOriginalText();
       pendingNodes.clear();

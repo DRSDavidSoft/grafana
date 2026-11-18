@@ -167,11 +167,15 @@ html[dir="rtl"] [data-dm-filter-expression] input {
   text-align: left;
 }
 
-/* Long localized empty-state messages need text sizing inside Stat panels. */
-html[lang|="fa"] [data-dm-empty-value] {
-  font-size: clamp(14px, 2vw, 24px) !important;
-  line-height: 1.5 !important;
-  font-weight: 400 !important;
+/* Stat values are bounded by the renderer, including empty and mapped states.
+   Keep translated series names bounded too, including multi-window quota cards. */
+html[lang|="fa"] [data-dm-stat] {
+  min-width: 0;
+  max-width: 100%;
+}
+html[lang|="fa"] [data-dm-stat-name] {
+  font-size: clamp(12px, 1.2vw, 18px) !important;
+  line-height: 1.4 !important;
   max-width: 100%;
   white-space: normal;
   overflow-wrap: anywhere;
