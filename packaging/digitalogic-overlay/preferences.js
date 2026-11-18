@@ -54,27 +54,51 @@
       primary: '#0758d4', primaryHover: '#0846ab', contrast: '#ffffff',
       canvas: '#eef3f8', surface: '#ffffff', secondary: '#f6faff', elevated: '#ffffff',
       text: '#263d4a', muted: '#465e78', border: '#cfdeef',
+      control: '#e8f2ff', controlHover: '#d7e8ff', controlBorder: '#b4cfee',
+      actionHover: '#0758d413', actionSelected: '#0758d427',
     },
     dark: {
       primary: '#83acff', primaryHover: '#9abbff', contrast: '#0b1220',
       canvas: '#0b1220', surface: '#121b2d', secondary: '#162238', elevated: '#172842',
       text: '#e5ecf7', muted: '#b2c9e2', border: '#2a4968',
+      control: '#192e4b', controlHover: '#25436a', controlBorder: '#355783',
+      actionHover: '#73cfff1f', actionSelected: '#73cfff36',
     },
   };
 
   function brandTheme(mode) {
     const colors = palette[mode];
+    const primary = {
+      main: colors.primary, mainEmphasis: colors.primaryHover,
+      backgroundEmphasis: colors.primaryHover, shade: colors.primaryHover,
+      contrastText: colors.contrast,
+    };
     return {
       colors: {
         mode,
-        primary: { main: colors.primary, mainEmphasis: colors.primaryHover, contrastText: colors.contrast },
+        primary,
+        accent: primary,
+        secondary: {
+          main: colors.control, shade: colors.controlHover,
+          background: colors.control, backgroundEmphasis: colors.controlHover,
+          contrastText: colors.text, text: colors.primary,
+          border: colors.controlBorder, subtleBorder: colors.controlBorder,
+          transparent: colors.actionHover, subtleBackground: colors.actionHover,
+        },
+        action: {
+          hover: colors.actionHover, focus: colors.actionSelected,
+          selected: colors.actionSelected, selectedBorder: colors.primary,
+        },
         background: {
           canvas: colors.canvas, page: colors.canvas, primary: colors.surface,
           secondary: colors.secondary, elevated: colors.elevated,
         },
         text: { primary: colors.text, secondary: colors.muted, link: colors.primary },
         border: { weak: colors.border, medium: colors.border, strong: colors.primary },
-        gradients: { brandHorizontal: 'linear-gradient(90deg, #00b3eb, #0168cd)' },
+        gradients: {
+          brandHorizontal: 'linear-gradient(90deg, #00b3eb, #0168cd)',
+          brandVertical: 'linear-gradient(0deg, #0168cd, #00b3eb)',
+        },
       },
       shape: { borderRadiusSm: 6, borderRadius: 9, borderRadiusLg: 18 },
     };
@@ -141,7 +165,7 @@
   });
 
   function loadPersian(catalog = 'grafana') {
-    return fetch(`${base}/public/locales/fa-IR/${catalog}.json?v=13.2.3-2`).then((response) => {
+    return fetch(`${base}/public/locales/fa-IR/${catalog}.json?v=13.2.3-3`).then((response) => {
       if (!response.ok) throw new Error(`Could not load Persian translations (${response.status})`);
       return response.json();
     }).catch((error) => {

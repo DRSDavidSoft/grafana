@@ -9,7 +9,7 @@
       },
       "adhoc-filters-combobox": {
         "remove-filter-value": "مقدار فیلتر را حذف کنید - {{itemLabel}}",
-        "use-custom-value": "از ارزش سفارشی استفاده کنید: {{itemLabel}}"
+        "use-custom-value": "استفاده از مقدار دلخواه: {{itemLabel}}"
       },
       "base-pill": {
         "remove": "{{label}} را حذف کنید"
@@ -19,7 +19,7 @@
         "recent-empty": "مقادیر اخیر وجود ندارد",
         "recommended": "توصیه می‌شود",
         "recommended-empty": "مقادیر توصیه شده وجود ندارد",
-        "tooltip": "نمایش توصیه ها"
+        "tooltip": "نمایش پیشنهادها"
       },
       "fallback-page": {
         "content": "اگر با استفاده از یک پیوند راه خود را به اینجا پیدا کردید، ممکن است اشکالی در این برنامه وجود داشته باشد.",

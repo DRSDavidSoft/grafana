@@ -6,7 +6,7 @@ from pathlib import Path
 
 ASSETS = (
     '<link rel="stylesheet" href="/public/img/preferences.css?v=6" />\n'
-    '<script defer src="/public/img/preferences.js?v=4"></script>\n'
+    '<script defer src="/public/img/preferences.js?v=5"></script>\n'
     '<script defer src="/public/img/branding-fa.js?v=3"></script>\n'
 )
 

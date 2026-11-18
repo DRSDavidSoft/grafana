@@ -5054,10 +5054,10 @@
       "error": "هنگام بارگیری گزینه ها خطایی روی داد."
     },
     "clear": {
-      "title": "ارزش پاک کردن"
+      "title": "پاک کردن مقدار"
     },
     "custom-value": {
-      "description": "از ارزش سفارشی استفاده کنید"
+      "description": "استفاده از مقدار دلخواه"
     },
     "options": {
       "loading": "در حال بارگیری گزینه ها...",
@@ -5760,7 +5760,7 @@
         "placeholder": "جست‌وجو..."
       },
       "title": "ویرایش فیلترها",
-      "use-custom-value": "از ارزش سفارشی استفاده کنید",
+      "use-custom-value": "استفاده از مقدار دلخواه",
       "value": {
         "aria-label": "ارزش",
         "placeholder": "مقدار را انتخاب کنید"
@@ -8283,7 +8283,7 @@
       "label-source": "منبع"
     },
     "resource-picker": {
-      "aria-label-clear-value": "ارزش پاک کردن",
+      "aria-label-clear-value": "پاک کردن مقدار",
       "render-small-resource-picker": {
         "set-icon": "نماد تنظیم"
       }
@@ -8321,7 +8321,7 @@
       "noOptionsMessage-no-fields-found": "هیچ فیلدی پیدا نشد"
     },
     "text-dimension-editor": {
-      "aria-label-clear-value": "ارزش پاک کردن",
+      "aria-label-clear-value": "پاک کردن مقدار",
       "description-field": "نمایش مقدار فیلد",
       "description-fixed": "ارزش ثابت",
       "label-field": "میدان",
@@ -10579,7 +10579,7 @@
       "no-options": "هیچ گزینه ای پیدا نشد"
     },
     "select": {
-      "clear-value": "ارزش پاک کردن",
+      "clear-value": "پاک کردن مقدار",
       "default-create-label": "برای افزودن اینتر را بزنید",
       "empty-options": "هیچ گزینه ای ارائه نشده است",
       "menu-label": "منوی گزینه ها را انتخاب کنید",
