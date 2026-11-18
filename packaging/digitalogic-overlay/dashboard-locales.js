@@ -1,12 +1,12 @@
 (() => {
   if (!document.documentElement.lang.startsWith('fa') || !window.grafanaBootData?.user?.isSignedIn) return;
 
-  const root = document.getElementById('reactRoot');
   const subUrl = window.grafanaBootData.settings.appSubUrl ?? '';
-  const displaySurface = '#pageContent, header.dm-app-nav, #grafana-portal-container, [role="tooltip"]';
+  const displaySurface = '#pageContent, header.dm-app-nav, #grafana-portal-container, ' +
+    '[role="tooltip"], [role="listbox"], [role="menu"], [role="dialog"]';
   const editableSurface = 'input, textarea, select, option, [contenteditable]:not([contenteditable="false"]), ' +
     '.monaco-editor, pre, code, script, style, [role="textbox"]';
-  const displayAttributes = ['aria-label', 'title'];
+  const displayAttributes = ['aria-label', 'title', 'placeholder'];
   const pendingNodes = new Set();
   const translatedText = new Map();
   const translatedAttrs = new Map();
@@ -24,11 +24,25 @@
     return localized ? text.replace(trimmed, () => localized) : text;
   }
 
+  const emptyValues = new Set([
+    'No data', 'No data points', 'Unavailable',
+    'داده‌ای وجود ندارد', 'داده ای وجود ندارد', 'داده‌ای برای نمایش وجود ندارد', 'در دسترس نیست',
+  ]);
+
+  function fitEmptyValue(parent) {
+    const value = parent.closest('[style*="font-size"]');
+    if (!value || value.style.fontWeight !== '700' || value.style.zIndex !== '1') return;
+    value.toggleAttribute('data-dm-empty-value', emptyValues.has(value.textContent.trim()));
+  }
+
   function localizeText(node) {
     const parent = node.parentElement;
     if (!parent || !parent.closest(displaySurface) || parent.closest(editableSurface)) return;
     const previous = translatedText.get(node);
-    if (previous?.value === node.data) return;
+    if (previous?.value === node.data) {
+      fitEmptyValue(parent);
+      return;
+    }
     const value = localize(node.data);
     if (value !== node.data) {
       translatedText.set(node, { original: node.data, value });
@@ -36,10 +50,16 @@
     } else {
       translatedText.delete(node);
     }
+    fitEmptyValue(parent);
   }
 
   function localizeAttributes(element) {
-    if (!element.closest(displaySurface) || element.closest(editableSurface)) return;
+    const filterInput = element.matches('input[placeholder="+ label = value"], input[placeholder="+ برچسب = مقدار"]');
+    if (filterInput) {
+      const control = element.closest('[data-testid="data-testid template variable"]');
+      control?.querySelector(':scope > div')?.setAttribute('data-dm-filter-expression', '');
+    }
+    if (!element.closest(displaySurface) || (!filterInput && element.closest(editableSurface))) return;
     for (const name of displayAttributes) {
       const original = element.getAttribute(name);
       if (!original || translatedAttrs.get(element)?.[name]?.value === original) continue;
@@ -61,7 +81,7 @@
     }
     if (node.nodeType !== Node.ELEMENT_NODE) return;
     localizeAttributes(node);
-    for (const element of node.querySelectorAll('[aria-label], [title]')) localizeAttributes(element);
+    for (const element of node.querySelectorAll('[aria-label], [title], [placeholder]')) localizeAttributes(element);
     const walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT);
     while (walker.nextNode()) localizeText(walker.currentNode);
   }
@@ -145,7 +165,7 @@
     }
     schedule();
   });
-  mutations.observe(root, { childList: true, characterData: true, attributes: true, subtree: true, attributeFilter: displayAttributes });
+  mutations.observe(document.body, { childList: true, characterData: true, attributes: true, subtree: true, attributeFilter: displayAttributes });
   mutations.observe(document.querySelector('title'), { childList: true, characterData: true, subtree: true });
   window.addEventListener('popstate', schedule);
   refresh();

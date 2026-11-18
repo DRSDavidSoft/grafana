@@ -10,7 +10,7 @@ The catalogs match Grafana 13.2.3 and Scenes 8.13.5. They were machine translate
 
 ## Persian dashboard content
 
-Provisioned dashboard definitions can have a separate Persian display catalog. In the signed-in Persian view the overlay translates authored labels, descriptions, legend entries, and known status values. It leaves the saved dashboard, queries, and value mappings in their original form. Stat values use weight 700, and numeric values keep their units in reading order in RTL layouts.
+Provisioned dashboard definitions can have a separate Persian display catalog. In the signed-in Persian view the overlay translates authored labels, descriptions, legend entries, and known status values. It leaves the saved dashboard, queries, and value mappings in their original form. Stat values use weight 700, and numeric values keep their units in reading order in RTL layouts. Localized empty messages use a smaller wrapping text style. Ad hoc filter expressions retain label/operator/value order while the surrounding variable labels follow the interface direction. The display catalog also covers generated table headings and dropdown labels.
 
 Keep the catalog outside public assets. Use dashboard UIDs as the top-level JSON keys. Each value contains a `strings` object mapping exact English display strings to Persian and an optional `title` object with `original` and `value` fields for the browser page title. The optional `extract_dashboard_text.py` utility lists candidate strings from provisioned V1 and V2 JSON files for review.
 

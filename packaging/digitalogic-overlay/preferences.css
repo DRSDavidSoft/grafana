@@ -81,10 +81,18 @@ html[dir="rtl"] [data-testid="data-testid Command palette trigger"] > div > div:
   gap: 4px;
   flex-shrink: 0;
   position: relative;
-  color: #263d4a;
+  color: #0758d4;
+  --dm-preference-background: #e8f2ff;
+  --dm-preference-hover: #d7e8ff;
+  --dm-preference-border: #b4cfee;
 }
 
-.theme-dark .dm-preference-controls { color: #e5ecf7; }
+.theme-dark .dm-preference-controls {
+  color: #a6ceff;
+  --dm-preference-background: #192e4b;
+  --dm-preference-hover: #25436a;
+  --dm-preference-border: #355783;
+}
 .dm-preference-controls button {
   display: grid;
   place-items: center;
@@ -92,17 +100,15 @@ html[dir="rtl"] [data-testid="data-testid Command palette trigger"] > div > div:
   width: 34px;
   height: 34px;
   padding: 0;
-  border: 1px solid #cfdeef;
-  background: #ffffff;
+  border: 1px solid var(--dm-preference-border);
+  background: var(--dm-preference-background);
   border-radius: 9px;
   cursor: pointer;
   font-weight: 700;
 }
 
-.dm-preference-controls button:hover { background: #e6f1ff; }
-.theme-dark .dm-preference-controls button { background: #121b2d; border-color: #2a4968; }
-.theme-dark .dm-preference-controls button:hover { background: #172842; }
-.dm-preference-controls button:focus-visible { outline: 2px solid #2268ff; outline-offset: 2px; }
+.dm-preference-controls button:hover:not(:disabled) { background: var(--dm-preference-hover); }
+.dm-preference-controls button:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
 .dm-preference-controls button:disabled { opacity: .7; }
 .dm-preference-theme::before {
   content: "";
@@ -146,4 +152,27 @@ body.dm-welcome.theme-dark {
   .dm-preference-controls button { width: 30px; height: 30px; }
   .dm-preference-theme::before { width: 16px; height: 16px; }
   .dm-entry-controls { inset-block-start: 8px; }
+}
+
+
+/* Filter expressions keep label, operator and value in query order. */
+html[dir="rtl"] [data-dm-filter-expression] {
+  direction: ltr;
+  unicode-bidi: isolate;
+  text-align: left;
+}
+html[dir="rtl"] [data-dm-filter-expression] input {
+  direction: ltr;
+  unicode-bidi: isolate;
+  text-align: left;
+}
+
+/* Long localized empty-state messages need text sizing inside Stat panels. */
+html[lang|="fa"] [data-dm-empty-value] {
+  font-size: clamp(14px, 2vw, 24px) !important;
+  line-height: 1.5 !important;
+  font-weight: 400 !important;
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
