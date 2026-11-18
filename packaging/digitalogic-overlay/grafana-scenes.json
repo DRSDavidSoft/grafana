@@ -1,0 +1,190 @@
+{
+  "grafana-scenes": {
+    "components": {
+      "adhoc-filter-pill": {
+        "edit-filter-with-key": "فیلتر را با کلید {{keyLabel}} ویرایش کنید",
+        "managed-filter": "فیلتر مدیریت شده {{origin}}",
+        "non-applicable": "فیلتر قابل اجرا نیست",
+        "remove-filter-with-key": "فیلتر را با کلید {{keyLabel}} بردارید"
+      },
+      "adhoc-filters-combobox": {
+        "remove-filter-value": "مقدار فیلتر را حذف کنید - {{itemLabel}}",
+        "use-custom-value": "استفاده از مقدار دلخواه: {{itemLabel}}"
+      },
+      "base-pill": {
+        "remove": "{{label}} را حذف کنید"
+      },
+      "drilldown-recommendations": {
+        "recent": "اخیر",
+        "recent-empty": "مقادیر اخیر وجود ندارد",
+        "recommended": "توصیه می‌شود",
+        "recommended-empty": "مقادیر توصیه شده وجود ندارد",
+        "tooltip": "نمایش پیشنهادها"
+      },
+      "fallback-page": {
+        "content": "اگر با استفاده از یک پیوند راه خود را به اینجا پیدا کردید، ممکن است اشکالی در این برنامه وجود داشته باشد.",
+        "subTitle": "آدرس اینترنتی با هیچ صفحه ای مطابقت نداشت",
+        "title": "پیدا نشد"
+      },
+      "group-by-pill": {
+        "applied-by-default": "به طور پیش فرض در این داشبورد اعمال می‌شود. در صورت ویرایش، به داشبوردهای دیگر منتقل می‌شود.",
+        "group-by-key": "گروه توسط {{keyLabel}}",
+        "remove-group-by-key": "حذف گروه توسط {{keyLabel}}"
+      },
+      "nested-scene-renderer": {
+        "collapse-button-label": "صحنه فروپاشی",
+        "expand-button-label": "گسترش صحنه",
+        "remove-button-label": "حذف صحنه"
+      },
+      "scene-debugger": {
+        "object-details": "جزئیات شی",
+        "scene-graph": "نمودار صحنه",
+        "title-scene-debugger": "دیباگر صحنه"
+      },
+      "scene-grid-row": {
+        "collapse-row": "جمع کردن ردیف با عنوان {{title}}",
+        "expand-row": "ردیف را با عنوان {{title}} گسترش دهید"
+      },
+      "scene-refresh-picker": {
+        "text-cancel": "انصراف",
+        "text-refresh": "به‌روزرسانی",
+        "tooltip-cancel": "همه پرس‌وجوها را لغو کنید"
+      },
+      "scene-time-range-compare-renderer": {
+        "button-label": "مقایسه",
+        "button-tooltip": "مقایسه بازه زمانی را فعال کنید"
+      },
+      "splitter": {
+        "aria-label-pane-resize-widget": "ویجت تغییر اندازه صفحه"
+      },
+      "time-picker": {
+        "move-backward-tooltip": "{{moveBackwardDuration}} را به عقب حرکت دهید",
+        "move-forward-tooltip": "{{moveForwardDuration}} را به جلو حرکت دهید"
+      },
+      "viz-panel": {
+        "title": {
+          "title": "عنوان"
+        }
+      },
+      "viz-panel-explore-button": {
+        "explore": "کاوش"
+      },
+      "viz-panel-renderer": {
+        "loading-plugin-panel": "در حال بارگیری پنل افزونه...",
+        "outdated-plugin-error": "یک خطای غیرمنتظره رخ داد. به روز رسانی افزونه \"{{pluginName}}\" به آخرین نسخه ممکن است مشکل را برطرف کند.",
+        "panel-plugin-has-no-panel-component": "افزونه پنل هیچ جزء پنل ندارد"
+      },
+      "viz-panel-series-limit": {
+        "content-rendering-series-single-panel-impact-performance": "رندر کردن تعداد زیادی سری در یک پانل ممکن است بر عملکرد تأثیر بگذارد و خواندن داده ها را سخت تر کند.",
+        "warning-message": "نمایش فقط سری {{seriesLimit}}"
+      }
+    },
+    "utils": {
+      "controls-label": {
+        "tooltip-remove": "برداشتن"
+      },
+      "loading-indicator": {
+        "content-cancel-query": "لغو پرس‌وجو"
+      }
+    },
+    "variables": {
+      "ad-hoc-combobox": {
+        "aria-label-edit-filter-operator": "ویرایش اپراتور فیلتر"
+      },
+      "ad-hoc-filter-builder": {
+        "aria-label-add-filter": "افزودن فیلتر",
+        "title-add-filter": "افزودن فیلتر"
+      },
+      "ad-hoc-filter-renderer": {
+        "aria-label-remove-filter": "فیلتر را بردارید",
+        "key-select": {
+          "placeholder-select-label": "برچسب را انتخاب کنید"
+        },
+        "label-select-label": "برچسب را انتخاب کنید",
+        "title-remove-filter": "فیلتر را بردارید",
+        "value-select": {
+          "placeholder-select-value": "مقدار را انتخاب کنید"
+        }
+      },
+      "adhoc-filters-combobox-renderer": {
+        "clear-all": "پاک کردن همه",
+        "collapse": "فرو ریختن",
+        "collapse-filters": "فیلترها را جمع کنید",
+        "expand-filters": "گسترش فیلترها",
+        "group-by-label": "گروه بندی بر اساس:",
+        "restore-default-group-by": "گروه بای تنظیم شده توسط این داشبورد را بازیابی کنید.",
+        "show-more-filters_one": "نمایش فیلترهای {{count}} بیشتر",
+        "show-more-filters_other": "نمایش فیلترهای {{count}} بیشتر",
+        "show-more-group-by_one": "نمایش {{count}} گروه بیشتر توسط کلید",
+        "show-more-group-by_other": "نمایش {{count}} گروه بیشتر توسط کلید"
+      },
+      "data-source-variable": {
+        "label": {
+          "default": "پیش فرض"
+        }
+      },
+      "default-group-by-custom-indicator-container": {
+        "aria-label-clear": "روشن",
+        "tooltip": "به طور پیش فرض در این داشبورد اعمال می‌شود. در صورت ویرایش، به داشبوردهای دیگر منتقل می‌شود.",
+        "tooltip-restore-groupby-set-by-this-dashboard": "گروه بای تنظیم شده توسط این داشبورد را بازیابی کنید."
+      },
+      "expression-hint-placeholder": {
+        "press-enter-to-apply": "برای اعمال اینتر را فشار دهید"
+      },
+      "format-registry": {
+        "formats": {
+          "description": {
+            "commaseparated-values": "مقادیر جدا شده با کاما",
+            "double-quoted-values": "مقادیر دوبار نقل قول",
+            "format-date-in-different-ways": "تاریخ را به روش های مختلف قالب بندی کنید",
+            "format-multivalued-variables-using-syntax-example": "قالب بندی متغیرهای چند ارزشی با استفاده از نحو glob، به عنوان مثال {value1,value2}",
+            "html-escaping-of-values": "فرار HTML از مقادیر",
+            "join-values-with-a-comma": "مقادیر را با کاما بپیوندید",
+            "json-stringify-value": "JSON stringify مقدار",
+            "keep-value-as-is": "ارزش را همانطور که هست حفظ کنید",
+            "multiple-values-are-formatted-like-variablevalue": "چندین مقدار مانند variable=value قالب بندی می‌شوند",
+            "single-quoted-values": "مقادیر منفرد نقل شده",
+            "useful-escaping-values-taking-syntax-characters": "مفید برای مقادیر فرار URL، درج در کاراکترهای نحوی URI",
+            "useful-for-url-escaping-values": "برای مقادیر فرار از URL مفید است",
+            "values-are-separated-by-character": "مقادیر با | از هم جدا می‌شوند شخصیت"
+          }
+        }
+      },
+      "group-by-variable-renderer": {
+        "aria-label-group-by-selector": "گروه بندی بر اساس انتخابگر",
+        "placeholder-group-by-label": "گروه بندی بر اساس برچسب"
+      },
+      "interval-variable": {
+        "placeholder-select-value": "مقدار را انتخاب کنید"
+      },
+      "loading-options-placeholder": {
+        "loading-options": "در حال بارگیری گزینه ها..."
+      },
+      "multi-value-apply-button": {
+        "apply": "اعمال"
+      },
+      "no-options-placeholder": {
+        "no-options-found": "هیچ گزینه ای پیدا نشد"
+      },
+      "options-error-placeholder": {
+        "error-occurred-fetching-labels-click-retry": "هنگام واکشی برچسب ها خطایی روی داده است. برای امتحان مجدد کلیک کنید"
+      },
+      "test-object-with-variable-dependency": {
+        "title": {
+          "hello": "سلام"
+        }
+      },
+      "test-variable": {
+        "text": {
+          "text": "متن"
+        }
+      },
+      "variable-value-input": {
+        "placeholder-enter-value": "مقدار را وارد کنید"
+      },
+      "variable-value-select": {
+        "placeholder-select-value": "مقدار را انتخاب کنید"
+      }
+    }
+  }
+}

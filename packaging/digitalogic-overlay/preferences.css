@@ -1,0 +1,182 @@
+@font-face {
+  font-family: Vazirmatn;
+  src: url("fonts/vazirmatn/Vazirmatn-FD-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Vazirmatn;
+  src: url("fonts/vazirmatn/Vazirmatn-FD-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Vazirmatn;
+  src: url("fonts/vazirmatn/Vazirmatn-FD-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}
+
+body.dm-welcome { font-family: Aptos, "Segoe UI", system-ui, sans-serif; }
+
+html[lang|="fa"] {
+  --dm-interface-font: Vazirmatn, Aptos, "Segoe UI", system-ui, sans-serif;
+}
+
+html[lang|="fa"] :is(body, button, input, select, textarea, .dm-welcome, .dm-preference-controls) {
+  font-family: var(--dm-interface-font);
+}
+
+html[lang|="fa"] :is(.dm-login-headline, .dm-workspace h1, .dm-intro h1) {
+  letter-spacing: normal;
+  line-height: 1.2;
+}
+
+html[lang|="fa"] #reactRoot :is(h1, h2, h3, h4, h5, h6, p, label, legend) {
+  unicode-bidi: plaintext;
+}
+
+:is(html[dir="rtl"], .dm-workspace[dir="rtl"]) .dm-arrow { transform: scaleX(-1); }
+html[dir="rtl"] .dm-back .dm-arrow { transform: none; }
+html[dir="rtl"] :is(.monaco-editor, pre, code, input[type="url"], input[type="email"], input[type="password"], input[name="user"]) {
+  direction: ltr;
+  text-align: start;
+}
+html[dir="rtl"] .login-content-box input::placeholder { text-align: right; }
+html[dir="rtl"] :is(.monaco-editor, pre, code) { font-family: "Roboto Mono", monospace; }
+
+/* The grid and chart libraries calculate physical x positions from the left. */
+[data-dm-rtl-grid], html[dir="rtl"] .uplot { direction: ltr; }
+[data-dm-rtl-grid] .react-grid-item { direction: rtl; }
+[data-dm-rtl-grid] .scene-resize-handle {
+  right: auto;
+  left: 0;
+  cursor: sw-resize;
+  padding: 12px 12px 0 0;
+}
+[data-dm-rtl-grid] .scene-resize-handle svg { transform: scaleX(-1); }
+
+html[dir="rtl"] [data-testid="data-testid Command palette trigger"] > div > div:first-child {
+  left: auto;
+  right: 0;
+}
+html[dir="rtl"] [data-testid="data-testid Command palette trigger"] > div > div:last-child {
+  right: auto;
+  left: 0;
+}
+html[dir="rtl"] [data-testid="data-testid Command palette trigger"] button {
+  padding: 0 28px 0 56px;
+  text-align: start;
+}
+html[dir="rtl"] [data-testid="data-testid Command palette trigger"] > div > div:last-child span {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+.dm-preference-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  position: relative;
+  color: #0758d4;
+  --dm-preference-background: #e8f2ff;
+  --dm-preference-hover: #d7e8ff;
+  --dm-preference-border: #b4cfee;
+}
+
+.theme-dark .dm-preference-controls {
+  color: #a6ceff;
+  --dm-preference-background: #192e4b;
+  --dm-preference-hover: #25436a;
+  --dm-preference-border: #355783;
+}
+.dm-preference-controls button {
+  display: grid;
+  place-items: center;
+  color: inherit;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid var(--dm-preference-border);
+  background: var(--dm-preference-background);
+  border-radius: 9px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.dm-preference-controls button:hover:not(:disabled) { background: var(--dm-preference-hover); }
+.dm-preference-controls button:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+.dm-preference-controls button:disabled { opacity: .7; }
+.dm-preference-theme::before {
+  content: "";
+  width: 18px;
+  height: 18px;
+  background: currentColor;
+  mask: url("icons/unicons/moon.svg") center / contain no-repeat;
+}
+.theme-dark .dm-preference-theme::before { mask-image: url("icons/unicons/sun.svg"); }
+.dm-preference-language[lang="fa"] { font-family: Vazirmatn, sans-serif; }
+.dm-preference-status:empty { display: none; }
+.dm-preference-status {
+  position: absolute;
+  top: calc(100% + 4px);
+  inset-inline-end: 0;
+  z-index: 10;
+  width: max-content;
+  max-width: 180px;
+  padding: 4px 10px;
+  background: #102640;
+  color: white;
+  border-radius: 6px;
+}
+.dm-entry-controls { position: absolute; inset-block-start: 10px; inset-inline-end: 12px; z-index: 2; }
+.dm-app-nav {
+  box-shadow: inset 0 -1px 0 #2282d840;
+}
+body.dm-welcome.theme-dark {
+  --dm-ink: #edf7ff;
+  --dm-muted: #b2c9e2;
+  --dm-blue: #83acff;
+  --dm-surface: #121b2d;
+  --dm-line: #2a4968;
+  --dm-icon-bg: #173657;
+  background: radial-gradient(ellipse at 15% 0%, #12385b 0%, transparent 56%), #0b1220;
+}
+.dm-welcome.theme-dark .dm-header { background: #121b2d; }
+.dm-welcome .dm-preference-controls { margin-inline-start: auto; }
+
+@media (max-width: 600px) {
+  .dm-preference-controls button { width: 30px; height: 30px; }
+  .dm-preference-theme::before { width: 16px; height: 16px; }
+  .dm-entry-controls { inset-block-start: 8px; }
+}
+
+
+/* Filter expressions keep label, operator and value in query order. */
+html[dir="rtl"] [data-dm-filter-expression] {
+  direction: ltr;
+  unicode-bidi: isolate;
+  text-align: left;
+}
+html[dir="rtl"] [data-dm-filter-expression] input {
+  direction: ltr;
+  unicode-bidi: isolate;
+  text-align: left;
+}
+
+/* Stat values are bounded by the renderer, including empty and mapped states.
+   Keep translated series names bounded too, including multi-window quota cards. */
+html[lang|="fa"] [data-dm-stat] {
+  min-width: 0;
+  max-width: 100%;
+}
+html[lang|="fa"] [data-dm-stat-name] {
+  font-size: clamp(12px, 1.2vw, 18px) !important;
+  line-height: 1.4 !important;
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
