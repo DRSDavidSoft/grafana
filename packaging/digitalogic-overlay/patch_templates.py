@@ -17,7 +17,7 @@ WORKSPACE_ASSETS = (
 )
 
 
-DASHBOARD_LOCALES_ASSET = '<script defer src="/public/img/dashboard-locales.js?v=2"></script>\n'
+DASHBOARD_LOCALES_ASSET = '<script defer src="/public/img/dashboard-locales.js?v=3"></script>\n'
 
 
 def update_template(source, workspace=False):
@@ -32,7 +32,7 @@ def update_template(source, workspace=False):
     if workspace and "workspace-cards.js" not in source:
         source = source.replace(ASSETS, ASSETS + WORKSPACE_ASSETS, 1)
     if workspace:
-        source = re.sub(r'/public/img/dashboard-locales\.js\?v=\d+', '/public/img/dashboard-locales.js?v=2', source)
+        source = re.sub(r'/public/img/dashboard-locales\.js\?v=\d+', '/public/img/dashboard-locales.js?v=3', source)
     if workspace and "dashboard-locales.js" not in source:
         source = source.replace("</head>", DASHBOARD_LOCALES_ASSET + "</head>", 1)
     return source

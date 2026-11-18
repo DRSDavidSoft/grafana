@@ -54,7 +54,10 @@
   }
 
   function localizeAttributes(element) {
-    const filterInput = element.matches('input[placeholder="+ label = value"], input[placeholder="+ برچسب = مقدار"]');
+    // Ignore bidi formatting marks when recognizing the query-expression placeholder.
+    const placeholder = element.getAttribute('placeholder')?.replace(/[\u200e\u200f\u2066-\u2069]/g, '');
+    const filterInput = element.tagName === 'INPUT' &&
+      (placeholder === '+ label = value' || placeholder === '+ برچسب = مقدار');
     if (filterInput) {
       const control = element.closest('[data-testid="data-testid template variable"]');
       control?.querySelector(':scope > div')?.setAttribute('data-dm-filter-expression', '');
